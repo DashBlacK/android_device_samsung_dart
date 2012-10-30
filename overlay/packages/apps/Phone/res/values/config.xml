@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2009 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- Phone app resources that may need to be customized
+     for different hardware or product builds. -->
+<resources>
+    <!-- If true, enable the onscreen touch UI for regular "ongoing call"
+         states of the in-call UI.
+         In general, the touch UI is used for regular calls only on
+         devices with a proximity sensor.  (On other devices, we can't
+         have touchable UI onscreen during a call because of the risk of
+         false cheek touches.)
+         TODO: maybe this can be determined algorithmically based on
+         specific properties of the device, perhaps by detecting the
+         presence of a proximity sensor and/or hard SEND/END keys.  (If
+         so, we wouldn't need this flag at all.) -->
+    <bool name="allow_in_call_touch_ui">false</bool>
+
+    <!-- Determine whether calls to mute the microphone in PhoneUtils
+         are routed through the android.media.AudioManager class (true) or through
+         the com.android.internal.telephony.Phone interface (false). -->
+    <bool name="send_mic_mute_to_AudioManager">true</bool>
+
+    <!-- Determines if device implements a noise suppression device for in call audio-->
+    <bool name="has_in_call_noise_suppression">false</bool>
+
+</resources>
