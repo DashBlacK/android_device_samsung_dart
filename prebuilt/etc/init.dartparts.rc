@@ -1,0 +1,13 @@
+on boot
+
+# DartParts - helper service
+service dartparts /system/bin/sh /system/bin/handle_dartparts
+    user root
+    group root
+    oneshot
+
+on property:persist.sys.swap=0
+    exec /system/xbin/swapoff /dev/block/mmcblk0p3
+
+on property:persist.sys.swap=1
+    exec /system/xbin/swapon /dev/block/mmcblk0p3
