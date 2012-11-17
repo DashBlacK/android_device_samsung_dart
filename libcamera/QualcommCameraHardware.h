@@ -35,7 +35,7 @@
 
 extern "C" {
 #include <linux/android_pmem.h>
-#include <linux/msm_camera.h>
+#include <media/msm_camera.h>
 }
 
 struct str_map {
@@ -71,7 +71,7 @@ struct board_property{
 #define CAMERA_MIN_CONTRAST 0
 #define CAMERA_MAX_CONTRAST 4
 #define CAMERA_MIN_SHARPNESS 0
-#define CAMERA_MIN_EXPOSURE_COMPENSATION -4
+#define CAMERA_MIN_EXPOSURE_COMPENSATION -4//255
 #define CAMERA_MAX_SHARPNESS 4
 #define CAMERA_MIN_SATURATION 0
 #define CAMERA_MAX_SATURATION 4
@@ -176,6 +176,7 @@ enum {
 	LED_MODE_ON,
 };
 
+#if 0
 typedef enum {
 	CAMERA_ISO_AUTO,
 	CAMERA_ISO_DEBLUR,
@@ -185,6 +186,7 @@ typedef enum {
 	CAMERA_ISO_800,
 	CAMERA_ISO_1600,
 } camera_iso_mode_type;
+#endif
 
 struct fifo_queue {
 	int num_of_frames;
@@ -641,4 +643,3 @@ private:
 }; // namespace android
 
 #endif
-

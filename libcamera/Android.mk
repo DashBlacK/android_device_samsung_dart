@@ -36,4 +36,3 @@ LOCAL_MODULE:= libcamera
 include $(BUILD_SHARED_LIBRARY)
 
 endif
-

@@ -70,7 +70,7 @@ extern "C" {
 #include <sys/time.h>
 #include <stdlib.h>
 
-#include <linux/msm_camera.h>
+#include <media/msm_camera.h>
 
 #define DEFAULT_PICTURE_WIDTH  1024
 #define DEFAULT_PICTURE_HEIGHT 768
@@ -299,20 +299,20 @@ static const int PICTURE_FORMAT_RAW = 2;
 
 // from aeecamera.h
 static const str_map whitebalance[] = {
-    { CameraParameters::WHITE_BALANCE_AUTO,            CAMERA_WB_AUTO },
-    { CameraParameters::WHITE_BALANCE_DAYLIGHT,        CAMERA_WB_DAYLIGHT },
-    { CameraParameters::WHITE_BALANCE_CLOUDY_DAYLIGHT, CAMERA_WB_CLOUDY_DAYLIGHT },
-    { CameraParameters::WHITE_BALANCE_FLUORESCENT,     CAMERA_WB_FLUORESCENT },
-    { CameraParameters::WHITE_BALANCE_INCANDESCENT,    CAMERA_WB_INCANDESCENT }
+    { CameraParameters::WHITE_BALANCE_AUTO,            EXT_CFG_WB_AUTO },
+    { CameraParameters::WHITE_BALANCE_DAYLIGHT,        EXT_CFG_WB_DAYLIGHT },
+    { CameraParameters::WHITE_BALANCE_CLOUDY_DAYLIGHT, EXT_CFG_WB_CLOUDY },
+    { CameraParameters::WHITE_BALANCE_FLUORESCENT,     EXT_CFG_WB_FLUORESCENT },
+    { CameraParameters::WHITE_BALANCE_INCANDESCENT,    EXT_CFG_WB_INCANDESCENT }
 };
 
 // from camera_effect_t. This list must match aeecamera.h
 static const str_map effects[] = {
-    { CameraParameters::EFFECT_NONE,       CAMERA_EFFECT_OFF },
-    { CameraParameters::EFFECT_MONO,       CAMERA_EFFECT_MONO },
-    { CameraParameters::EFFECT_NEGATIVE,   CAMERA_EFFECT_NEGATIVE },
+    { CameraParameters::EFFECT_NONE,       EXT_CFG_EFFECT_NORMAL },
+    { CameraParameters::EFFECT_NEGATIVE,   EXT_CFG_EFFECT_NEGATIVE },
+    { CameraParameters::EFFECT_MONO,       EXT_CFG_EFFECT_MONO },
+    { CameraParameters::EFFECT_SEPIA,      EXT_CFG_EFFECT_SEPIA },
     { CameraParameters::EFFECT_SOLARIZE,   CAMERA_EFFECT_SOLARIZE },
-    { CameraParameters::EFFECT_SEPIA,      CAMERA_EFFECT_SEPIA },
     { CameraParameters::EFFECT_POSTERIZE,  CAMERA_EFFECT_POSTERIZE },
     { CameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
     { CameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
@@ -321,9 +321,9 @@ static const str_map effects[] = {
 
 // from qcamera/common/camera.h
 static const str_map autoexposure[] = {
-    { CameraParameters::AUTO_EXPOSURE_FRAME_AVG,  CAMERA_AEC_FRAME_AVERAGE },
-    { CameraParameters::AUTO_EXPOSURE_CENTER_WEIGHTED, CAMERA_AEC_CENTER_WEIGHTED },
-    { CameraParameters::AUTO_EXPOSURE_SPOT_METERING, CAMERA_AEC_SPOT_METERING }
+    { CameraParameters::AUTO_EXPOSURE_FRAME_AVG,  EXT_CFG_METERING_NORMAL },
+    { CameraParameters::AUTO_EXPOSURE_SPOT_METERING, EXT_CFG_METERING_SPOT },
+    { CameraParameters::AUTO_EXPOSURE_CENTER_WEIGHTED, EXT_CFG_METERING_CENTER }
 };
 
 // from qcamera/common/camera.h
@@ -580,11 +580,11 @@ static const str_map flash[] = {
 
 // from mm-camera/common/camera.h.
 static const str_map iso[] = {
-    { CameraParameters::ISO_AUTO,  CAMERA_ISO_AUTO},
-    { CameraParameters::ISO_HJR,   CAMERA_ISO_DEBLUR},
-    { CameraParameters::ISO_100,   CAMERA_ISO_100},
-    { CameraParameters::ISO_200,   CAMERA_ISO_200},
-    { CameraParameters::ISO_400,   CAMERA_ISO_400},
+    { CameraParameters::ISO_AUTO,  EXT_CFG_ISO_AUTO},
+    { CameraParameters::ISO_HJR,   EXT_CFG_ISO_50},
+    { CameraParameters::ISO_100,   EXT_CFG_ISO_100},
+    { CameraParameters::ISO_200,   EXT_CFG_ISO_200},
+    { CameraParameters::ISO_400,   EXT_CFG_ISO_400},
     { CameraParameters::ISO_800,   CAMERA_ISO_800 }
 };
 
@@ -593,8 +593,8 @@ static const str_map iso[] = {
 static const str_map focus_modes[] = {
     { CameraParameters::FOCUS_MODE_AUTO,     AF_MODE_AUTO},
     { CameraParameters::FOCUS_MODE_INFINITY, DONT_CARE },
-    { CameraParameters::FOCUS_MODE_NORMAL,   AF_MODE_NORMAL },
-    { CameraParameters::FOCUS_MODE_MACRO,    AF_MODE_MACRO }
+    { CameraParameters::FOCUS_MODE_NORMAL,   EXT_CFG_AF_SET_NORMAL },
+    { CameraParameters::FOCUS_MODE_MACRO,    EXT_CFG_AF_SET_MACRO }
 };
 
 static const str_map lensshade[] = {
@@ -616,7 +616,6 @@ static SensorType sensorTypes[] = {
         { "5mp", 2608, 1960, false,  2592, 1944,0x00000fff },
         { "5mp", 5184, 1944, false,  2592, 1944,0x00000fff },
         { "3mp", 2064, 1544, true, 2048, 1536,0x000007ff },
-	{ "3mp", 4096, 1536, true, 2048, 1536,0x000007ff }, // 3MP blade
         { "2mp", 3200, 1200, false, 1600, 1200,0x000007ff } };
 
 
@@ -3892,16 +3891,16 @@ status_t QualcommCameraHardware::setEffect(const CameraParameters& params)
     if (str != NULL) {
         int32_t value = attr_lookup(effects, sizeof(effects) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            if(!strcmp(sensorType->name, "2mp") && (value != CAMERA_EFFECT_OFF)
-               &&(value != CAMERA_EFFECT_MONO) && (value != CAMERA_EFFECT_NEGATIVE)
-               &&(value != CAMERA_EFFECT_SOLARIZE) && (value != CAMERA_EFFECT_SEPIA)) {
+            if(!strcmp(sensorType->name, "2mp") && (value != EXT_CFG_EFFECT_OFF)
+               &&(value != EXT_CFG_EFFECT_MONO) && (value != EXT_CFG_EFFECT_NEGATIVE)
+               &&(value != EXT_CFG_EFFECT_SOLARIZE) && (value != EXT_CFG_EFFECT_SEPIA)) {
                 LOGE("Special effect parameter is not supported for this sensor");
                 return NO_ERROR;
             }
 
-           if(((value == CAMERA_EFFECT_MONO) || (value == CAMERA_EFFECT_NEGATIVE)
-           || (value == CAMERA_EFFECT_AQUA) || (value == CAMERA_EFFECT_SEPIA))
-               && (value_wb != CAMERA_WB_AUTO)) {
+           if(((value == EXT_CFG_EFFECT_MONO) || (value == EXT_CFG_EFFECT_NEGATIVE)
+           || (value == EXT_CFG_EFFECT_AQUA) || (value == EXT_CFG_EFFECT_SEPIA))
+               && (value_wb != EXT_CFG_WB_AUTO)) {
                LOGE("Color Effect value will not be set " \
                "when the whitebalance selected is %s", str_wb);
                return NO_ERROR;
@@ -3984,8 +3983,8 @@ status_t QualcommCameraHardware::setSaturation(const CameraParameters& params)
     const char *str = params.get(CameraParameters::KEY_EFFECT);
     int32_t value = attr_lookup(effects, sizeof(effects) / sizeof(str_map), str);
 
-    if( (value != CAMERA_EFFECT_MONO) && (value != CAMERA_EFFECT_NEGATIVE)
-	    && (value != CAMERA_EFFECT_AQUA) && (value != CAMERA_EFFECT_SEPIA)) {
+    if( (value != EXT_CFG_EFFECT_MONO) && (value != EXT_CFG_EFFECT_NEGATIVE)
+	    && (value != EXT_CFG_EFFECT_AQUA) && (value != EXT_CFG_EFFECT_SEPIA)) {
 
 	int saturation = params.getInt(CameraParameters::KEY_SATURATION);
 	if((saturation < CAMERA_MIN_SATURATION)
@@ -4036,8 +4035,8 @@ status_t QualcommCameraHardware::setWhiteBalance(const CameraParameters& params)
     const char *str_effect = mParameters.get(CameraParameters::KEY_EFFECT);
     int32_t value_effect = attr_lookup(effects, sizeof(effects) / sizeof(str_map), str_effect);
 
-    if( (value_effect != CAMERA_EFFECT_MONO) && (value_effect != CAMERA_EFFECT_NEGATIVE)
-    && (value_effect != CAMERA_EFFECT_AQUA) && (value_effect != CAMERA_EFFECT_SEPIA)) {
+    if( (value_effect != EXT_CFG_EFFECT_MONO) && (value_effect != EXT_CFG_EFFECT_NEGATIVE)
+    && (value_effect != EXT_CFG_EFFECT_AQUA) && (value_effect != EXT_CFG_EFFECT_SEPIA)) {
         const char *str = params.get(CameraParameters::KEY_WHITE_BALANCE);
 
         if (str != NULL) {
@@ -4140,13 +4139,13 @@ status_t  QualcommCameraHardware::setISOValue(const CameraParameters& params) {
           iso, sizeof(iso) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
             camera_iso_mode_type temp = (camera_iso_mode_type) value;
-            if (value == CAMERA_ISO_DEBLUR) {
+            if (value == EXT_CFG_ISO_50) {
                temp_hjr = true;
                native_set_parm(CAMERA_SET_PARM_HJR, sizeof(int8_t), (void*)&temp_hjr);
                mHJR = value;
             }
             else {
-               if (mHJR == CAMERA_ISO_DEBLUR) {
+               if (mHJR == EXT_CFG_ISO_50) {
                    temp_hjr = false;
                    native_set_parm(CAMERA_SET_PARM_HJR, sizeof(int8_t), (void*)&temp_hjr);
                    mHJR = value;
@@ -4768,4 +4767,3 @@ status_t QualcommCameraHardware::getBufferInfo(sp<IMemory>& Frame, size_t *align
 }
 
 }; // namespace android
-
