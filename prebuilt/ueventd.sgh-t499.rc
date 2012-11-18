@@ -33,7 +33,7 @@
 /dev/system_bus_freq		0666	root		root
 /dev/cpu_dma_latency		0666	root		root
 
-/dev/msm_camera			0660	system		system
+/dev/msm_camera/*    		0660    system  	camera
 /dev/smdcntl0			0640	radio		radio
 /dev/smdcntl1			0640	radio		radio
 /dev/smdcntl2			0640	radio		radio
