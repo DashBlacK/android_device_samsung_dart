@@ -3891,15 +3891,15 @@ status_t QualcommCameraHardware::setEffect(const CameraParameters& params)
     if (str != NULL) {
         int32_t value = attr_lookup(effects, sizeof(effects) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            if(!strcmp(sensorType->name, "2mp") && (value != EXT_CFG_EFFECT_OFF)
+            if(!strcmp(sensorType->name, "2mp") && (value != EXT_CFG_EFFECT_NORMAL)
                &&(value != EXT_CFG_EFFECT_MONO) && (value != EXT_CFG_EFFECT_NEGATIVE)
-               &&(value != EXT_CFG_EFFECT_SOLARIZE) && (value != EXT_CFG_EFFECT_SEPIA)) {
+               &&(value != CAMERA_EFFECT_SOLARIZE) && (value != EXT_CFG_EFFECT_SEPIA)) {
                 LOGE("Special effect parameter is not supported for this sensor");
                 return NO_ERROR;
             }
 
            if(((value == EXT_CFG_EFFECT_MONO) || (value == EXT_CFG_EFFECT_NEGATIVE)
-           || (value == EXT_CFG_EFFECT_AQUA) || (value == EXT_CFG_EFFECT_SEPIA))
+           || (value == CAMERA_EFFECT_AQUA) || (value == EXT_CFG_EFFECT_SEPIA))
                && (value_wb != EXT_CFG_WB_AUTO)) {
                LOGE("Color Effect value will not be set " \
                "when the whitebalance selected is %s", str_wb);
@@ -3984,7 +3984,7 @@ status_t QualcommCameraHardware::setSaturation(const CameraParameters& params)
     int32_t value = attr_lookup(effects, sizeof(effects) / sizeof(str_map), str);
 
     if( (value != EXT_CFG_EFFECT_MONO) && (value != EXT_CFG_EFFECT_NEGATIVE)
-	    && (value != EXT_CFG_EFFECT_AQUA) && (value != EXT_CFG_EFFECT_SEPIA)) {
+	    && (value != CAMERA_EFFECT_AQUA) && (value != EXT_CFG_EFFECT_SEPIA)) {
 
 	int saturation = params.getInt(CameraParameters::KEY_SATURATION);
 	if((saturation < CAMERA_MIN_SATURATION)
@@ -4036,7 +4036,7 @@ status_t QualcommCameraHardware::setWhiteBalance(const CameraParameters& params)
     int32_t value_effect = attr_lookup(effects, sizeof(effects) / sizeof(str_map), str_effect);
 
     if( (value_effect != EXT_CFG_EFFECT_MONO) && (value_effect != EXT_CFG_EFFECT_NEGATIVE)
-    && (value_effect != EXT_CFG_EFFECT_AQUA) && (value_effect != EXT_CFG_EFFECT_SEPIA)) {
+    && (value_effect != CAMERA_EFFECT_AQUA) && (value_effect != EXT_CFG_EFFECT_SEPIA)) {
         const char *str = params.get(CameraParameters::KEY_WHITE_BALANCE);
 
         if (str != NULL) {

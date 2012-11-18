@@ -176,7 +176,6 @@ enum {
 	LED_MODE_ON,
 };
 
-#if 0
 typedef enum {
 	CAMERA_ISO_AUTO,
 	CAMERA_ISO_DEBLUR,
@@ -186,7 +185,6 @@ typedef enum {
 	CAMERA_ISO_800,
 	CAMERA_ISO_1600,
 } camera_iso_mode_type;
-#endif
 
 struct fifo_queue {
 	int num_of_frames;
