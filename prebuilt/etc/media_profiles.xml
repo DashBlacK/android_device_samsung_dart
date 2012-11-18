@@ -81,10 +81,10 @@
 
         <EncoderProfile quality="high" fileFormat="mp4" duration="60">
             <Video codec="h264"
-                   bitRate="1500000"
+                   bitRate="3078000"
                    width="640"
                    height="480"
-                   frameRate="15" />
+                   frameRate="30" />
 
             <Audio codec="aac"
                    bitRate="96000"
@@ -101,7 +101,7 @@
                    frameRate="15" />
 
             <Audio codec="amrnb"
-                   bitRate="12200"
+                   bitRate="23450"
                    sampleRate="8000"
                    channels="1" />
 
@@ -112,7 +112,7 @@
         <ImageEncoding quality="80" />
         <ImageDecoding memCap="20000000" />
 
-        <Camera previewFrameRate="15" />
+        <Camera previewFrameRate="0" />
 
     </CamcorderProfiles>
 
@@ -126,22 +126,22 @@
          or query the capabilities of the codec at all if it is disabled
     -->
     <VideoEncoderCap name="h263" enabled="true"
-        minBitRate="64000" maxBitRate="1500000"
+        minBitRate="96100" maxBitRate="1500000"
         minFrameWidth="176" maxFrameWidth="640"
         minFrameHeight="144" maxFrameHeight="480"
-        minFrameRate="1" maxFrameRate="24" />
+        minFrameRate="1" maxFrameRate="30" />
 
     <VideoEncoderCap name="m4v" enabled="true"
-        minBitRate="64000" maxBitRate="1500000"
+        minBitRate="96100" maxBitRate="1500000"
         minFrameWidth="176" maxFrameWidth="640"
         minFrameHeight="144" maxFrameHeight="480"
-        minFrameRate="1" maxFrameRate="24" />
+        minFrameRate="1" maxFrameRate="30" />
         
     <VideoEncoderCap name="h264" enabled="true"
-        minBitRate="64000" maxBitRate="1500000"
+        minBitRate="96100" maxBitRate="1500000"
         minFrameWidth="176" maxFrameWidth="640"
         minFrameHeight="144" maxFrameHeight="480"
-        minFrameRate="1" maxFrameRate="15" />        
+        minFrameRate="1" maxFrameRate="30" />        
 
     <AudioEncoderCap name="amrnb" enabled="true"
         minBitRate="5525" maxBitRate="12200"
@@ -154,3 +154,4 @@
         minChannels="1" maxChannels="1" />
 
 </MediaSettings>
+
